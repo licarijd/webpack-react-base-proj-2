@@ -7,7 +7,7 @@ import ReactDOMServer from 'react-dom/server';
 import { Provider } from 'react-redux';
 import { StaticRouter } from 'react-router';
 
-import configureStore from '../common/store/configureStore';
+import configureStore from '../src/store/configureStore';
 
 import App from '../src/App';
 import Welcome from '../common/scenes/Welcome';
@@ -40,6 +40,7 @@ function render (req, res) {
           <html>
           <head>
             <script>window.__INITIAL__DATA__ = ${JSON.stringify({ name })}</script>
+            <script>window.__PRELOADED_STATE__ = ${JSON.stringify({store})}</script>
           </head>
           <body>
           <div id="root">${component}</div>
