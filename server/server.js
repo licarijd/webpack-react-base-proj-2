@@ -35,7 +35,7 @@ function render (req, res) {
             </Provider>
         );
 
-        const html = `
+        /*const html = `
         <!doctype html>
           <html>
           <head>
@@ -46,13 +46,44 @@ function render (req, res) {
           <div id="root">${component}</div>
           <script src="/static/home.js"></script>
         </body>
-        </html>`
+        </html>`*/
 
-        res.writeHead(200, { "Content-Type": "text/html"});
+        // Grab the initial state from our Redux store
+        const preloadedState = store.getState()
 
-        res.end(html);
+        //res.writeHead(200, { "Content-Type": "text/html"});
+
+        //res.end(html);
     //}
+        // Send the rendered page back to the client
+        res.send(renderFullPage(component, preloadedState))
+
+
+function renderFullPage(html, preloadedState) {
+    return `
+      <!doctype html>
+      <html>
+        <head>
+        <script>window.__INITIAL__DATA__ = ${JSON.stringify({ name })}</script>
+        <script>
+          // WARNING: See the following for security issues around embedding JSON in HTML:
+          // http://redux.js.org/recipes/ServerRendering.html#security-considerations
+          window.__PRELOADED_STATE__ = ${JSON.stringify(preloadedState).replace(
+            /</g,
+            '\\u003c'
+          )}
+        </script>
+          <title>Redux Universal Example</title>
+        </head>
+        <body>
+          <div id="root">${html}</div>
+          <script src="/static/bundle.js"></script>
+        </body>
+      </html>
+      `
+  }
 }
+
 
 app.listen(PORT, () => {
   console.log(`😎 Server is listening on port ${PORT}`);
