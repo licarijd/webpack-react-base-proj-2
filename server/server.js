@@ -13,19 +13,23 @@ const app = express();
 app.use(express.static('./build'));
 
 app.get('/*', (req, res) => {
-  const app = ReactDOMServer.renderToString(<App />);
+    const name = 'Marvelous Wololo'
 
-  const indexFile = path.resolve('./build/index.html');
-  fs.readFile(indexFile, 'utf8', (err, data) => {
-    if (err) {
-      console.error('Something went wrong:', err);
-      return res.status(500).send('Oops, better luck next time!');
-    }
-
-    return res.send(
-      data.replace('<div id="root"></div>', `<div id="root"><div id="from-server">${app}</div></div>`)
-    );
-  });
+    const component = ReactDOMServer.renderToString(<App name={name} />)
+  
+    const html = `
+    <!doctype html>
+      <html>
+      <head>
+        <script>window.__INITIAL__DATA__ = ${JSON.stringify({ name })}</script>
+      </head>
+      <body>
+      <div id="root">${component}</div>
+      <script src="/static/home.js"></script>
+    </body>
+    </html>`
+  
+    res.send(html)
 });
 
 app.listen(PORT, () => {
