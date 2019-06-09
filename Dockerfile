@@ -1,4 +1,4 @@
-FROM node:chakracore
+FROM node:carbon
 
 WORKDIR /usr/src/allports-web-2
 
