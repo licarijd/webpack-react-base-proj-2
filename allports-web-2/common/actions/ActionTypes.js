@@ -1,3 +1,0 @@
-export const SELECT_LOGIN = 'SELECT_LOGIN';
-
-export const SELECT_SIGNUP = 'SELECT_SIGNUP';
